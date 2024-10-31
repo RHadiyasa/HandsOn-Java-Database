@@ -4,10 +4,7 @@ import com.enigma.gosling.config.DbConfig;
 import com.enigma.gosling.service.ViewData;
 import com.enigma.gosling.service.impl.ViewDataImpl;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 public class Login {
@@ -20,8 +17,9 @@ public class Login {
     public void login() {
         System.out.println("Login");
 
-        try(Connection conn = dbConfig.getConnection()){
+        try (Connection conn = dbConfig.getConnection()) {
             Statement statement = conn.createStatement();
+            ViewData view = new ViewDataImpl();
 
             // Create table m_user id, username, password
             // SQL injection example
@@ -42,13 +40,23 @@ public class Login {
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 System.out.println("Login Success");
-                ViewData view = new ViewDataImpl();
                 view.display();
             } else {
                 System.out.println("Invalid login");
             }
 
-        }catch (SQLException exception){
+            resultSet.close();
+            statement.close();
+
+            /**
+             * PreparedStatement
+             * is used to prevent SQL injection and execute SQL statement
+             * .set -> method for filled prepared statement (?) from parameter
+             * the rest is the same with Statement
+             * */
+
+        } catch (
+                SQLException exception) {
             exception.printStackTrace();
             System.out.println("Connection failed: " + exception.getMessage());
         }
