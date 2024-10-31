@@ -5,6 +5,7 @@ import com.enigma.gosling.service.ViewData;
 import com.enigma.gosling.service.impl.ViewDataImpl;
 
 import java.sql.*;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class Login {
@@ -18,35 +19,37 @@ public class Login {
         System.out.println("Login");
 
         try (Connection conn = dbConfig.getConnection()) {
-            Statement statement = conn.createStatement();
-            ViewData view = new ViewDataImpl();
+            try (Statement statement = conn.createStatement()) {
+                // Statement statement = conn.createStatement();
+                ViewData view = new ViewDataImpl();
 
-            // Create table m_user id, username, password
-            // SQL injection example
+                // Create table m_user id, username, password
+                // SQL injection example
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("Input Username: ");
+                String username = scanner.nextLine();
+                System.out.print("Input Password: ");
+                String password = scanner.nextLine();
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Input Username: ");
-            String username = scanner.nextLine();
-            System.out.print("Input Password: ");
-            String password = scanner.nextLine();
+                // Example injection
+                // username : admin' OR '1'='1
+                // password : admin' OR '1'='1
 
-            // Example injection
-            // username : admin' OR '1'='1
-            // password : admin' OR '1'='1
+                String query = "SELECT username from m_user WHERE username = '" + username + "' AND password = '" + password + "'";
+                System.out.println(query);
 
-            String query = "SELECT username from m_user WHERE username = '" + username + "' AND password = '" + password + "'";
-            System.out.println(query);
-
-            ResultSet resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                System.out.println("Login Success");
-                view.display();
-            } else {
-                System.out.println("Invalid login");
+                ResultSet resultSet = statement.executeQuery(query);
+                System.out.println("result: " + resultSet);
+                if (resultSet.next()) {
+                    System.out.println("Login Success");
+                    view.display();
+                } else {
+                    System.out.println("Invalid login");
+                }
+            } catch (SQLException exception) {
+                System.out.println(exception.getMessage());
             }
 
-            resultSet.close();
-            statement.close();
 
             /**
              * PreparedStatement
@@ -55,8 +58,7 @@ public class Login {
              * the rest is the same with Statement
              * */
 
-        } catch (
-                SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
             System.out.println("Connection failed: " + exception.getMessage());
         }
