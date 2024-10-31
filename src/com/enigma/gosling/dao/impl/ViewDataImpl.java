@@ -1,7 +1,7 @@
-package com.enigma.gosling.service.impl;
+package com.enigma.gosling.dao.impl;
 
 import com.enigma.gosling.config.DbConfig;
-import com.enigma.gosling.service.ViewData;
+import com.enigma.gosling.dao.ViewData;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

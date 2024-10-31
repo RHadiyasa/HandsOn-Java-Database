@@ -1,4 +1,4 @@
-package com.enigma.gosling.service;
+package com.enigma.gosling.dao;
 
 public interface ViewData {
     void display();
