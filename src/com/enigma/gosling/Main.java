@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Java Database");
 
-        ViewData viewData = new ViewDataImpl();
-        viewData.display();
+        Login login = new Login();
+        login.login();
     }
 }
